@@ -23,6 +23,9 @@ public class ScanCommander {
 //			System.out.println(portInterval.get(i));
 	}
 	
+	/*
+	 * To be reviewed since dibmap should support different scan types at once
+	 */
 	synchronized int getPort() {
 		if (index < portInterval.size())
 			return portInterval.get(index++);

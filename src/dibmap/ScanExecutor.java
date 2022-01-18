@@ -1,17 +1,24 @@
 package dibmap;
 
 import java.io.IOException;
+
+// Net libraries
 import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+// TCP sockets
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
+import java.net.DatagramPacket;
+// UDP sockets
+import java.net.DatagramSocket;
 
 public class ScanExecutor implements Runnable {
 
-	//	private String target;
 	private InetAddress target;
-	private InetSocketAddress addr;
+//	private InetSocketAddress addr;
 	private String[] scanType;
 	private int port;
 	private ScanCommander commander;
@@ -27,16 +34,16 @@ public class ScanExecutor implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < scanType.length; i++) {
+			Result r;
 			switch (scanType[i]) {
 			case "c":
 				Socket s;
-				Result r;
 				while (true) {
 					port = commander.getPort();
 					if (port != -1) {
 						try {
 							//						System.out.println("Scanning port " + port);
-							addr = new InetSocketAddress(target, port);
+							InetSocketAddress addr = new InetSocketAddress(target, port);
 							//						s = new Socket(target, port);
 							s = new Socket();
 							//						s.setSoTimeout(2000);
@@ -76,6 +83,36 @@ public class ScanExecutor implements Runnable {
 			case "f":
 				break;
 			case "u":
+				DatagramSocket d;
+				while (true) {
+					port = commander.getPort();
+					if (port != -1) {
+						try {
+							d = new DatagramSocket();
+							byte[] buffer = new byte[256];
+							DatagramPacket packet = new DatagramPacket(buffer, buffer.length, target, port);
+							System.out.println("Sending packet.");
+							d.send(packet);
+							packet = new DatagramPacket(buffer, buffer.length);
+							System.out.println("Waiting for packet.");
+							d.setSoTimeout(timeout);
+							d.receive(packet);
+							String received = new String(packet.getData(), 0, packet.getLength());
+							System.out.println(received);
+//							r = new Result(port, "udp", "open");
+						} catch (SocketException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (SecurityException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					else
+						break;
+				}
 				break;
 			}
 		}
