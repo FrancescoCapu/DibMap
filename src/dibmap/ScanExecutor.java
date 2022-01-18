@@ -1,17 +1,19 @@
 package dibmap;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class ScanExecutor implements Runnable {
 
-	private String target;
+//	private String target;
+	private InetAddress target;
 	private char scanType;
 	private int port;
 	private ScanCommander commander;
 	
-	public ScanExecutor(String target, char scanType, ScanCommander commander) {
+	public ScanExecutor(InetAddress target, char scanType, ScanCommander commander) {
 		this.target = target;
 		this.scanType = scanType;
 		this.commander = commander;

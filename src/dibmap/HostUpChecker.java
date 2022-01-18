@@ -6,31 +6,32 @@ import java.net.UnknownHostException;
 
 public class HostUpChecker {
 	
-	private String target;
+//	private InetAddress target;
 	private String errorReason;
 	
-	public HostUpChecker(String target) {
-		this.target = target;
+//	public HostUpChecker(InetAddress target) {
+	public HostUpChecker() {
+//		this.target = target;
 	}
 	
-	boolean checkReachability() {
-		InetAddress addr = null;
-		try {
-			addr = InetAddress.getByName(target);
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			errorReason = "Impossible to determine IP address of specified target.";
-			return false;
-		} catch (SecurityException e) {
-			e.printStackTrace();
-			errorReason = "A security violation has been verified.";
-			return false;
-		}
+	boolean checkReachability(InetAddress target) {
+//		InetAddress addr = null;
+//		try {
+//			addr = InetAddress.getByName(target);
+//		} catch (UnknownHostException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			errorReason = "Impossible to determine IP address of specified target.";
+//			return false;
+//		} catch (SecurityException e) {
+//			e.printStackTrace();
+//			errorReason = "A security violation has been verified.";
+//			return false;
+//		}
 		
 		int timeout = 5000;
 		try {
-			if (addr.isReachable(timeout))
+			if (target.isReachable(timeout))
 				return true;
 			errorReason = "Ping timed out - took more than " + timeout + " ms.";
 			return false;
@@ -39,6 +40,10 @@ public class HostUpChecker {
 			e.printStackTrace();
 			errorReason = "IO Exception during ping process.";
 			return false;
+		} catch (IllegalArgumentException e) {
+			errorReason = "Illegal argument exception.";
+			return false;
+			
 		}
 	}
 	
