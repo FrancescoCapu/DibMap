@@ -9,8 +9,8 @@ public class Main {
 
 //	private static String target;
 	private static InetAddress target;
-	private static char scanType;
-	private static final int threads = 16;
+	private static char scanType = 'c';
+	private static final int threads = 64;
 	private static ScanCommander commander;
 	
 	public static void main(String[] args) {
@@ -27,7 +27,6 @@ public class Main {
 		
 		HostUpChecker checker = new HostUpChecker();
 		if (checker.checkReachability(target)) {
-			
 			// aggiungere opzione per cambiare intervallo in base a input
 			commander = new ScanCommander(1, 1023, threads);
 			
