@@ -13,9 +13,14 @@ public class ScanCommander {
 	
 	public ScanCommander(int startingPort, int endingPort, int activeThreads) {
 		this.activeThreads = activeThreads;
-		for (int i = startingPort; i < endingPort; i++) {
+		for (int i = startingPort; i <= endingPort; i++) {
 			portInterval.add(i);
 		}
+		
+//		Debug
+//		
+//		for (int i = 0; i < portInterval.size(); i++)
+//			System.out.println(portInterval.get(i));
 	}
 	
 	synchronized int getPort() {

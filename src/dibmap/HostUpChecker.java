@@ -2,33 +2,16 @@ package dibmap;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 public class HostUpChecker {
 	
-//	private InetAddress target;
 	private String errorReason;
 	
-//	public HostUpChecker(InetAddress target) {
 	public HostUpChecker() {
-//		this.target = target;
+
 	}
 	
 	boolean checkReachability(InetAddress target) {
-//		InetAddress addr = null;
-//		try {
-//			addr = InetAddress.getByName(target);
-//		} catch (UnknownHostException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			errorReason = "Impossible to determine IP address of specified target.";
-//			return false;
-//		} catch (SecurityException e) {
-//			e.printStackTrace();
-//			errorReason = "A security violation has been verified.";
-//			return false;
-//		}
-		
 		int timeout = 5000;
 		try {
 			if (target.isReachable(timeout))
@@ -41,9 +24,9 @@ public class HostUpChecker {
 			errorReason = "IO Exception during ping process.";
 			return false;
 		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
 			errorReason = "Illegal argument exception.";
 			return false;
-			
 		}
 	}
 	
