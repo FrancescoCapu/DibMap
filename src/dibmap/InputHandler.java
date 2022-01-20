@@ -90,8 +90,10 @@ public class InputHandler {
 				else
 					parameters.add(temporaryParameters[i]);
 			}
-			else
+			else {
 				System.out.println(temporaryParameters[i] + " not yet implemented or not supported.");
+				return false;
+			}
 		}
 		return true;
 	}

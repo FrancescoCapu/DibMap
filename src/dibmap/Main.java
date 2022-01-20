@@ -47,7 +47,7 @@ public class Main {
 			}
 			else {
 				endProgram = true;
-				Printer.print("Error during reachability test. Reason: " + checker.getErrorReason());
+				Printer.print("Error during reachability test. Host seems down. Reason: " + checker.getErrorReason());
 //				System.out.println("Error during reachability test. Reason: " + checker.getErrorReason());
 			}	
 		}

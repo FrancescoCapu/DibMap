@@ -5,11 +5,13 @@ import java.io.IOException;
 // Net libraries
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-
+import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
 // TCP sockets
 import java.net.InetSocketAddress;
 import java.net.PortUnreachableException;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.DatagramPacket;
@@ -23,7 +25,7 @@ public class ScanExecutor implements Runnable {
 	private String[] scanType;
 	private int port = 0;
 	private ScanCommander commander;
-	private int timeout = 2000;
+	private int timeout = 5000;
 	private Socket s;
 	private Result r;
 	private DatagramSocket d;
@@ -174,18 +176,27 @@ public class ScanExecutor implements Runnable {
 				case "f":
 					break;
 				case "u":
+					// datagramchannel
+					// Port unreachable with datagram channel
 					if (port != -1) {
 						try {
 							d = new DatagramSocket();
-							byte[] buffer = new byte[0];
+							String msg = "\n";
+//							byte[] buffer = new byte[0];
+							byte[] buffer = new byte[msg.length()];
+							buffer = msg.getBytes();
+
+//							d.connect(target, port);
 							packet = new DatagramPacket(buffer, buffer.length, target, port);
+
 							System.out.println("Sending packet to port " + port);
 							d.send(packet);
-							packet = new DatagramPacket(buffer, buffer.length, target, port);
+							
+//							packet = new DatagramPacket(buffer, buffer.length, target, port);
 							System.out.println("Waiting for an answer from " + target + ":" + port);
 							d.setSoTimeout(timeout);
-							d.connect(target, port);
 							d.receive(packet);
+							
 							String received = new String(packet.getData(), 0, packet.getLength());
 							System.out.println("Answer: " + received);
 							r = new Result(port, "udp", "open");
@@ -203,10 +214,30 @@ public class ScanExecutor implements Runnable {
 							e.printStackTrace();
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
-							r = new Result(port, "udp", "closed");
+							r = new Result(port, "udp", "open|filtered");
 							e.printStackTrace();
 						}
 						commander.recordResult(r);
+						
+//						DatagramChannel channel;
+//						try {
+//							channel = DatagramChannel.open();
+////							channel.configureBlocking(false);
+//							channel.socket().bind(null);
+//							channel.connect(new InetSocketAddress(target, port));
+//							ByteBuffer bytes = ByteBuffer.allocate(10);
+//							channel.send(bytes, new InetSocketAddress(target, port));
+//							r = new Result(port, "udp", "open");
+//						} catch (PortUnreachableException e) {
+//							r = new Result(port, "udp", "closed");
+//							e.printStackTrace();
+//						} catch (IOException e) {
+//							// TODO Auto-generated catch block
+//							r = new Result(port, "udp", "open|filtered");
+//							e.printStackTrace();
+//						}
+//						commander.recordResult(r);
+						
 					}
 					else
 						break;
