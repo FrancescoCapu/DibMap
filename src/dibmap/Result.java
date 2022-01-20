@@ -15,6 +15,9 @@ public class Result {
 	
 	@Override
 	public String toString(){
-		return port + "/" + scanType + "\t" + status + "\t" + protocol;
+		if (status.length() < 8)
+			return port + "/" + scanType + "\t" + status + "\t\t" + protocol;
+		else
+			return port + "/" + scanType + "\t" + status + "\t" + protocol;
 	}
 }

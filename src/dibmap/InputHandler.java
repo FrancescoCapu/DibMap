@@ -54,7 +54,7 @@ public class InputHandler {
 		
 		for (int i = 0; i < temporaryParameters.length; i++) {
 			if (validParameters.contains(temporaryParameters[i])) {
-				System.out.println(temporaryParameters[i] + " is a valid character");
+//				System.out.println(temporaryParameters[i] + " is a valid character");
 				if (temporaryParameters[i].equals("p")) {
 					try {
 //						if (temporaryParameters[i+1].contains("\\0{2,}")) {

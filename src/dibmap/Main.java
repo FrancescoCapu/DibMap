@@ -56,17 +56,19 @@ public class Main {
 	static void PrintResults() {
 		ArrayList<Result> results = commander.getResults();
 		System.out.println("-----SCAN RESULTS-----");
-		System.out.println("Port\tStatus\tProtocol");
+		System.out.println("Port\t\tStatus\t\tProtocol");
 
 		int count = 0;
 		int size = results.size();
-		for (int i = 0; i < size; i++)
-			if (!results.get(i).status.equals("closed")) {
+		for (int i = 0; i < size; i++) {
+//			if (!results.get(i).status.equals("closed")) {
 				System.out.println(results.get(i).toString());
-				count++;
-			}
+				if (!results.get(i).status.equals("closed"))
+					count++;
+		}
+//			}
 		System.out.println("-----END-----");
-		int totalPorts = endPort - startingPort + 1;
+		int totalPorts = (endPort - startingPort + 1) * scanType.length;
 		System.out.println("Open ports: " + count + " out of total " + totalPorts + " ports");
 	}
 }
