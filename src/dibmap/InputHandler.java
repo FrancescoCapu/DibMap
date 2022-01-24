@@ -9,17 +9,13 @@ public class InputHandler {
 	
 	private InetAddress target = null;
 	private ArrayList<String> parameters = new ArrayList<String>();
-	private String[] validParametersArray = {"c", "s", "f", "u", "p"};
+	private String[] validParametersArray = {"t", "u", "p"};
 	private ArrayList<String> validParameters = new ArrayList<String>();
 	private int startingPort = 1;
 	private int endPort = 1023;
 	
 	public InputHandler() {
 		validParameters.addAll(Arrays.asList(validParametersArray));
-//		Debug for loop
-//		
-//		for (int i = 0; i < validParameters.size(); i++)
-//			System.out.println(validParameters.get(i));
 	}
 	
 	boolean validateTarget(String target) {
@@ -27,7 +23,6 @@ public class InputHandler {
 			this.target = InetAddress.getByName(target);
 //			System.out.println(this.target);
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 //			System.out.println("Wrong IP.");
 			e.printStackTrace();
 		} catch (SecurityException e) {
@@ -43,16 +38,19 @@ public class InputHandler {
 	}
 	
 	boolean validateParameters(String[] args) {
-		
-		/*
-		 * To be implemented: check for duplcated parameters
-		 */
+		int len = args.length;
+		for (int i = 1; i < len; i++) {
+			args[i] = args[i].replace("-", "");
+			if (args[i].equals("p"))
+				++i;
+		}
 		
 		String[] temporaryParameters = new String[args.length - 1];
-		for (int i = 0; i < temporaryParameters.length; i++)
+		int tmeporaryParametersLength = temporaryParameters.length;
+		for (int i = 0; i < tmeporaryParametersLength; i++)
 			temporaryParameters[i] = args[i + 1];
 		
-		for (int i = 0; i < temporaryParameters.length; i++) {
+		for (int i = 0; i < tmeporaryParametersLength; i++) {
 			if (validParameters.contains(temporaryParameters[i])) {
 //				System.out.println(temporaryParameters[i] + " is a valid character");
 				if (temporaryParameters[i].equals("p")) {
@@ -65,9 +63,22 @@ public class InputHandler {
 						if (temporaryParameters[i+1].contains("-")) {
 							String[] ports = temporaryParameters[i+1].split("-");
 							if (ports.length == 2) {
-								startingPort = Integer.parseInt(ports[0]);
-								endPort = Integer.parseInt(ports[1]);
-								i += 2;
+								try {
+									startingPort = Integer.parseInt(ports[0]);
+									endPort = Integer.parseInt(ports[1]);
+									i += 2;
+									if (startingPort < 0 || startingPort > 65535 || endPort < 0 || endPort >65535) {
+										System.out.println("Invalid port number");
+										return false;
+									}
+									if (endPort < startingPort) {
+										System.out.println("Invalid port range");
+										return false;
+									}
+								} catch (NumberFormatException e) {
+									System.out.println("Invalid port number");
+									return false;
+								}
 							}
 							else {
 								System.out.println("Too many ports");
@@ -77,6 +88,10 @@ public class InputHandler {
 						else {
 							startingPort = Integer.parseInt(temporaryParameters[i+1]);
 							endPort = startingPort;
+							if (startingPort < 1 || startingPort > 65535) {
+								System.out.println("Invalid port number");
+								return false;
+							}
 							i += 1;
 						}
 					} catch (NumberFormatException e) {
@@ -95,6 +110,13 @@ public class InputHandler {
 				return false;
 			}
 		}
+		for (int i = 0; i < tmeporaryParametersLength; i++ ) {
+			for (int j = i + 1; j < tmeporaryParametersLength; j++)
+				if (temporaryParameters[i].equals(temporaryParameters[j])) {
+					System.out.println("Duplicated parameters");
+					return false;
+				}
+		}
 		return true;
 	}
 	
@@ -102,12 +124,13 @@ public class InputHandler {
 		String[] param;
 		if (parameters.size() != 0) {
 			param = new String[parameters.size()];
-			for (int i = 0; i < parameters.size(); i++)
+			int parametersSize = parameters.size();
+			for (int i = 0; i < parametersSize; i++)
 				param[i] = parameters.get(i);
 		}
 		else {
 			param = new String[1];
-			param[0] = "c";
+			param[0] = "t";
 		}
 		return param;
 	}

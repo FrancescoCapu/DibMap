@@ -2,8 +2,10 @@ package dibmap;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
 
@@ -14,7 +16,9 @@ public class Main {
 	private static boolean endProgram = false;
 	private static int startingPort;
 	private static int endPort;
-
+	private static long startTime;
+	private static long finishTime;
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
@@ -35,7 +39,7 @@ public class Main {
 		if (!endProgram) {
 			HostUpChecker checker = new HostUpChecker();
 			if (checker.checkReachability(target)) {
-				// aggiungere opzione per cambiare intervallo in base a input
+				startTime = System.currentTimeMillis();
 				commander = new ScanCommander(startingPort, endPort, threads);
 
 				ExecutorService pool = Executors.newFixedThreadPool(threads);
@@ -47,28 +51,32 @@ public class Main {
 			}
 			else {
 				endProgram = true;
-				Printer.print("Error during reachability test. Host seems down. Reason: " + checker.getErrorReason());
-//				System.out.println("Error during reachability test. Reason: " + checker.getErrorReason());
+				System.out.println("Error during reachability test. Host seems down. Reason: " + checker.getErrorReason());
 			}	
 		}
 	}
 
 	static void PrintResults() {
+		finishTime = System.currentTimeMillis();
+		long scanTime = finishTime - startTime;
+		long seconds = TimeUnit.MILLISECONDS.toSeconds(scanTime);
+		long millis = scanTime - seconds;
+	
 		ArrayList<Result> results = commander.getResults();
+		int count = 0;
+		int size = results.size();
+		int totalPorts = (endPort - startingPort + 1) * scanType.length;
 		System.out.println("-----SCAN RESULTS-----");
 		System.out.println("Port\t\tStatus\t\tProtocol");
 
-		int count = 0;
-		int size = results.size();
 		for (int i = 0; i < size; i++) {
-//			if (!results.get(i).status.equals("closed")) {
+			if (!results.get(i).status.equals("closed")) {
 				System.out.println(results.get(i).toString());
-				if (!results.get(i).status.equals("closed"))
-					count++;
+				count++;
+			}
 		}
-//			}
 		System.out.println("-----END-----");
-		int totalPorts = (endPort - startingPort + 1) * scanType.length;
-		System.out.println("Open ports: " + count + " out of total " + totalPorts + " ports");
+		System.out.println("Scan time: " + seconds + "." + millis + " seconds");
+		System.out.println("Not closed ports: " + count + " out of total " + totalPorts + " ports");
 	}
 }

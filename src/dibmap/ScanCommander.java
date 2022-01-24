@@ -49,6 +49,7 @@ public class ScanCommander {
 				return result1.port < result2.port ? 0 : 1;
 			}
 		});
+		
 		return results;
 	}
 }
