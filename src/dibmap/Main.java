@@ -2,9 +2,9 @@ package dibmap;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
@@ -18,6 +18,7 @@ public class Main {
 	private static int endPort;
 	private static long startTime;
 	private static long finishTime;
+	private static int activeThreads;
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -40,6 +41,7 @@ public class Main {
 			HostUpChecker checker = new HostUpChecker();
 			if (checker.checkReachability(target)) {
 				startTime = System.currentTimeMillis();
+				activeThreads = threads;
 				commander = new ScanCommander(startingPort, endPort, threads);
 
 				ExecutorService pool = Executors.newFixedThreadPool(threads);
@@ -55,8 +57,14 @@ public class Main {
 			}	
 		}
 	}
+	
+	synchronized static void executorShutdown() {
+		activeThreads--;
+		if (activeThreads == 0)
+			printResults();
+	}
 
-	static void PrintResults() {
+	private static void printResults() {
 		finishTime = System.currentTimeMillis();
 		long scanTime = finishTime - startTime;
 		long seconds = TimeUnit.MILLISECONDS.toSeconds(scanTime);

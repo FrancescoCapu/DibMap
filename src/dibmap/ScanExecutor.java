@@ -41,6 +41,10 @@ public class ScanExecutor implements Runnable {
 			port = commander.getPort();
 			int scanTypeLength = scanType.length;
 			for (int i = 0; i < scanTypeLength; i++) {
+				if (port == -1) {
+					Main.executorShutdown();
+					break;
+				}
 				switch (scanType[i]) {
 				// TCP full 3-way handshake scan
 				case "t":
@@ -92,11 +96,11 @@ public class ScanExecutor implements Runnable {
 							d.connect(target, port);
 							packet = new DatagramPacket(buffer, buffer.length, target, port);
 
-							System.out.println("Sending packet to port " + port);
+//							System.out.println("Sending packet to port " + port);
 							d.send(packet);
 //							d.send(null);
 //							packet = new DatagramPacket(buffer, buffer.length, target, port);
-							System.out.println("Waiting for an answer from " + target + ":" + port);
+//							System.out.println("Waiting for an answer from " + target + ":" + port);
 							d.setSoTimeout(timeout);
 							d.receive(packet);
 							
@@ -106,7 +110,7 @@ public class ScanExecutor implements Runnable {
 						} catch (PortUnreachableException e) {
 							System.out.println("Port " + port + " unreachable!");
 							r = new Result(port, "udp", "closed");
-							e.printStackTrace();
+//							e.printStackTrace();
 						} /*catch (SocketException e) {
 							// TODO Auto-generated catch block
 							System.out.println("Socket timed out.");
@@ -118,7 +122,7 @@ public class ScanExecutor implements Runnable {
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							r = new Result(port, "udp", "open|filtered");
-							e.printStackTrace();
+//							e.printStackTrace();
 						}
 						commander.recordResult(r);
 						

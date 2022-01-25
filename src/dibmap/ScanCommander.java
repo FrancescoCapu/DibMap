@@ -6,13 +6,13 @@ import java.util.Comparator;
 
 public class ScanCommander {
 
-	private int activeThreads;
+//	private int activeThreads;
 	private int index = 0;
 	private ArrayList<Integer> portInterval = new ArrayList<Integer>();
 	private ArrayList<Result> results = new ArrayList<Result>();
 	
 	public ScanCommander(int startingPort, int endingPort, int activeThreads) {
-		this.activeThreads = activeThreads;
+//		this.activeThreads = activeThreads;
 		for (int i = startingPort; i <= endingPort; i++) {
 			portInterval.add(i);
 		}
@@ -30,9 +30,9 @@ public class ScanCommander {
 		if (index < portInterval.size())
 			return portInterval.get(index++);
 		else {
-			activeThreads--;
-			if (activeThreads == 0)
-				Main.PrintResults();
+//			activeThreads--;
+//			if (activeThreads == 0)
+//				Main.printResults();
 			return -1;
 		}
 	}
