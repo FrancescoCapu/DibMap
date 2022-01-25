@@ -11,8 +11,12 @@ public class InputHandler {
 	private ArrayList<String> parameters = new ArrayList<String>();
 	private String[] validParametersArray = {"t", "u", "p"};
 	private ArrayList<String> validParameters = new ArrayList<String>();
+	
+	// Default port range: 1-1023 (well-known ports)
 	private int startingPort = 1;
 	private int endPort = 1023;
+	private final int MIN_PORT = 1;
+	private final int MAX_PORT = 65535;
 	
 	public InputHandler() {
 		validParameters.addAll(Arrays.asList(validParametersArray));
@@ -67,12 +71,12 @@ public class InputHandler {
 									startingPort = Integer.parseInt(ports[0]);
 									endPort = Integer.parseInt(ports[1]);
 									i += 2;
-									if (startingPort < 0 || startingPort > 65535 || endPort < 0 || endPort >65535) {
+									if (startingPort < MIN_PORT || startingPort > MAX_PORT || endPort < MIN_PORT || endPort > MAX_PORT) {
 										System.out.println("Invalid port number");
 										return false;
 									}
 									if (endPort < startingPort) {
-										System.out.println("Invalid port range");
+										System.out.println("Invalid port range - ascending order required");
 										return false;
 									}
 								} catch (NumberFormatException e) {
@@ -88,7 +92,7 @@ public class InputHandler {
 						else {
 							startingPort = Integer.parseInt(temporaryParameters[i+1]);
 							endPort = startingPort;
-							if (startingPort < 1 || startingPort > 65535) {
+							if (startingPort < MIN_PORT || startingPort > MAX_PORT) {
 								System.out.println("Invalid port number");
 								return false;
 							}
@@ -96,6 +100,10 @@ public class InputHandler {
 						}
 					} catch (NumberFormatException e) {
 						e.printStackTrace();
+						return false;
+					} catch (ArrayIndexOutOfBoundsException e) {
+						System.out.println("Too few arguments - port number(s) missing");
+//						e.printStackTrace();
 						return false;
 					} catch (IndexOutOfBoundsException e) {
 						e.printStackTrace();
