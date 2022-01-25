@@ -13,8 +13,6 @@ import java.net.SocketTimeoutException;
 import java.net.DatagramPacket;
 // UDP sockets
 import java.net.DatagramSocket;
-import java.nio.ByteBuffer;
-import java.nio.channels.DatagramChannel;
 
 public class ScanExecutor implements Runnable {
 
@@ -36,7 +34,6 @@ public class ScanExecutor implements Runnable {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		while (port != -1) {
 			port = commander.getPort();
 			int scanTypeLength = scanType.length;
@@ -62,14 +59,14 @@ public class ScanExecutor implements Runnable {
 						} catch (SocketTimeoutException e) {
 							//						e.printStackTrace();
 							System.out.println("Connection on port " + port + " timed out.");
-							r = new Result(port, "tcp", "? - timed out");
+							r = new Result(port, "tcp", "filtered - timed out");
 						} catch (IOException e) {
 							// e.printStackTrace();
 							r = new Result(port, "tcp", "closed");
 							commander.recordResult(r);
 						} catch (SecurityException e) {
 							// e.printStackTrace();
-							r = new Result(port, "tcp", "cannot determine");
+							r = new Result(port, "tcp", "filtered");
 							commander.recordResult(r);
 						} catch (IllegalArgumentException e) {
 							e.printStackTrace();
@@ -82,15 +79,12 @@ public class ScanExecutor implements Runnable {
 					break;
 				// UDP scan
 				case "u":
-					// datagramchannel
-					// Port unreachable with datagram channel
 					if (port != -1) {
 						// for loop used to achieve a more precise result - ICMP type 3 reply may not always be received
 						for (int j = 0; j < 4; j++) {
 							try {
 								d = new DatagramSocket();
 								String msg = "\n";
-								//							byte[] buffer = new byte[0];
 								byte[] buffer = new byte[msg.length()];
 								buffer = msg.getBytes();
 
@@ -98,11 +92,7 @@ public class ScanExecutor implements Runnable {
 								d.connect(target, port);
 								packet = new DatagramPacket(buffer, buffer.length, target, port);
 
-								//							System.out.println("Sending packet to port " + port);
 								d.send(packet);
-								//							d.send(null);
-								//							packet = new DatagramPacket(buffer, buffer.length, target, port);
-								//							System.out.println("Waiting for an answer from " + target + ":" + port);
 								d.setSoTimeout(timeout);
 								d.receive(packet);
 
@@ -114,42 +104,15 @@ public class ScanExecutor implements Runnable {
 								System.out.println("Port " + port + " unreachable!");
 								r = new Result(port, "udp", "closed");
 								break;
-								//							e.printStackTrace();
-							} /*catch (SocketException e) {
-							// TODO Auto-generated catch block
-							System.out.println("Socket timed out.");
-							r = new Result(port, "udp", "maybe open");
-							e.printStackTrace();
-						}*/ catch (SecurityException e) {
-							r = new Result(port, "udp", "filtered");
-							e.printStackTrace();
+							} 
+							catch (SecurityException e) {
+								r = new Result(port, "udp", "filtered");
+								e.printStackTrace();
 							} catch (IOException e) {
-							// TODO Auto-generated catch block
 								r = new Result(port, "udp", "open|filtered");
-							//							e.printStackTrace();
 							}
 						}
 						commander.recordResult(r);
-
-						//						DatagramChannel channel;
-						//						try {
-						//							channel = DatagramChannel.open();
-						////							channel.configureBlocking(false);
-						//							channel.socket().bind(null);
-						//							channel.connect(new InetSocketAddress(target, port));
-						//							ByteBuffer bytes = ByteBuffer.allocate(10);
-						//							channel.send(bytes, new InetSocketAddress(target, port));
-						//							r = new Result(port, "udp", "open");
-						//						} catch (PortUnreachableException e) {
-						//							r = new Result(port, "udp", "closed");
-						//							e.printStackTrace();
-						//						} catch (IOException e) {
-						//							// TODO Auto-generated catch block
-						//							r = new Result(port, "udp", "open|filtered");
-						//							e.printStackTrace();
-						//						}
-						//						commander.recordResult(r);
-
 					}
 					break;
 				}
