@@ -47,7 +47,8 @@ public class ScanCommander {
 			@Override
 			public int compare(Result result1, Result result2) {
 				// TODO Auto-generated method stub
-				return result1.port < result2.port ? 0 : 1;
+				return result1.port - result2.port;
+//				return result1.getPort() > result2.getPort() ? 0 : 1;
 			}
 		});
 		
