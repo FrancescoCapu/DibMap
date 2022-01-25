@@ -42,6 +42,7 @@ public class ScanCommander {
 	}
 	
 	ArrayList<Result> getResults() {
+		System.out.println("sorting ports");
 		Collections.sort(results, new Comparator<Result>() {
 			@Override
 			public int compare(Result result1, Result result2) {

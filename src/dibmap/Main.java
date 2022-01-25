@@ -69,10 +69,20 @@ public class Main {
 		System.out.println("-----SCAN RESULTS-----");
 		System.out.println("Port\t\tStatus\t\tProtocol");
 
+		if (size > 15) {
 		for (int i = 0; i < size; i++) {
 			if (!results.get(i).status.equals("closed")) {
 				System.out.println(results.get(i).toString());
 				count++;
+			}
+		}
+		}
+		else
+		{
+			for (int i = 0; i < size; i++) {
+				System.out.println(results.get(i).toString());
+				if (!results.get(i).status.equals("closed"))
+					count++;
 			}
 		}
 		System.out.println("-----END-----");

@@ -22,7 +22,7 @@ public class ScanExecutor implements Runnable {
 	private String[] scanType;
 	private int port = 0;
 	private ScanCommander commander;
-	private int timeout = 5000;
+	private int timeout = 3000;
 	private Socket s;
 	private Result r;
 	private DatagramSocket d;
@@ -88,15 +88,16 @@ public class ScanExecutor implements Runnable {
 							byte[] buffer = new byte[msg.length()];
 							buffer = msg.getBytes();
 
-//							d.connect(target, port);
+							
+							d.connect(target, port);
 							packet = new DatagramPacket(buffer, buffer.length, target, port);
 
 							System.out.println("Sending packet to port " + port);
 							d.send(packet);
-							
+//							d.send(null);
 //							packet = new DatagramPacket(buffer, buffer.length, target, port);
 							System.out.println("Waiting for an answer from " + target + ":" + port);
-							//d.setSoTimeout(timeout);
+							d.setSoTimeout(timeout);
 							d.receive(packet);
 							
 							String received = new String(packet.getData(), 0, packet.getLength());
