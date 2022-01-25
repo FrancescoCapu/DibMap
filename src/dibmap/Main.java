@@ -93,7 +93,7 @@ public class Main {
 					count++;
 			}
 		}
-		System.out.println("-----END-----");
+		System.out.println("---------END----------");
 		System.out.println("Scan time: " + seconds + "." + millis + " seconds");
 		System.out.println("Not closed ports: " + count + " out of total " + totalPorts + " ports");
 	}

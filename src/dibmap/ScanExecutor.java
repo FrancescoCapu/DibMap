@@ -85,33 +85,37 @@ public class ScanExecutor implements Runnable {
 					// datagramchannel
 					// Port unreachable with datagram channel
 					if (port != -1) {
-						try {
-							d = new DatagramSocket();
-							String msg = "\n";
-//							byte[] buffer = new byte[0];
-							byte[] buffer = new byte[msg.length()];
-							buffer = msg.getBytes();
+						// for loop used to achieve a more precise result - ICMP type 3 reply may not always be received
+						for (int j = 0; j < 4; j++) {
+							try {
+								d = new DatagramSocket();
+								String msg = "\n";
+								//							byte[] buffer = new byte[0];
+								byte[] buffer = new byte[msg.length()];
+								buffer = msg.getBytes();
 
-							
-							d.connect(target, port);
-							packet = new DatagramPacket(buffer, buffer.length, target, port);
 
-//							System.out.println("Sending packet to port " + port);
-							d.send(packet);
-//							d.send(null);
-//							packet = new DatagramPacket(buffer, buffer.length, target, port);
-//							System.out.println("Waiting for an answer from " + target + ":" + port);
-							d.setSoTimeout(timeout);
-							d.receive(packet);
-							
-							String received = new String(packet.getData(), 0, packet.getLength());
-							System.out.println("Answer: " + received);
-							r = new Result(port, "udp", "open");
-						} catch (PortUnreachableException e) {
-							System.out.println("Port " + port + " unreachable!");
-							r = new Result(port, "udp", "closed");
-//							e.printStackTrace();
-						} /*catch (SocketException e) {
+								d.connect(target, port);
+								packet = new DatagramPacket(buffer, buffer.length, target, port);
+
+								//							System.out.println("Sending packet to port " + port);
+								d.send(packet);
+								//							d.send(null);
+								//							packet = new DatagramPacket(buffer, buffer.length, target, port);
+								//							System.out.println("Waiting for an answer from " + target + ":" + port);
+								d.setSoTimeout(timeout);
+								d.receive(packet);
+
+								String received = new String(packet.getData(), 0, packet.getLength());
+								System.out.println("Answer: " + received);
+								r = new Result(port, "udp", "open");
+								break;
+							} catch (PortUnreachableException e) {
+								System.out.println("Port " + port + " unreachable!");
+								r = new Result(port, "udp", "closed");
+								break;
+								//							e.printStackTrace();
+							} /*catch (SocketException e) {
 							// TODO Auto-generated catch block
 							System.out.println("Socket timed out.");
 							r = new Result(port, "udp", "maybe open");
@@ -119,32 +123,33 @@ public class ScanExecutor implements Runnable {
 						}*/ catch (SecurityException e) {
 							r = new Result(port, "udp", "filtered");
 							e.printStackTrace();
-						} catch (IOException e) {
+							} catch (IOException e) {
 							// TODO Auto-generated catch block
-							r = new Result(port, "udp", "open|filtered");
-//							e.printStackTrace();
+								r = new Result(port, "udp", "open|filtered");
+							//							e.printStackTrace();
+							}
 						}
 						commander.recordResult(r);
-						
-//						DatagramChannel channel;
-//						try {
-//							channel = DatagramChannel.open();
-////							channel.configureBlocking(false);
-//							channel.socket().bind(null);
-//							channel.connect(new InetSocketAddress(target, port));
-//							ByteBuffer bytes = ByteBuffer.allocate(10);
-//							channel.send(bytes, new InetSocketAddress(target, port));
-//							r = new Result(port, "udp", "open");
-//						} catch (PortUnreachableException e) {
-//							r = new Result(port, "udp", "closed");
-//							e.printStackTrace();
-//						} catch (IOException e) {
-//							// TODO Auto-generated catch block
-//							r = new Result(port, "udp", "open|filtered");
-//							e.printStackTrace();
-//						}
-//						commander.recordResult(r);
-						
+
+						//						DatagramChannel channel;
+						//						try {
+						//							channel = DatagramChannel.open();
+						////							channel.configureBlocking(false);
+						//							channel.socket().bind(null);
+						//							channel.connect(new InetSocketAddress(target, port));
+						//							ByteBuffer bytes = ByteBuffer.allocate(10);
+						//							channel.send(bytes, new InetSocketAddress(target, port));
+						//							r = new Result(port, "udp", "open");
+						//						} catch (PortUnreachableException e) {
+						//							r = new Result(port, "udp", "closed");
+						//							e.printStackTrace();
+						//						} catch (IOException e) {
+						//							// TODO Auto-generated catch block
+						//							r = new Result(port, "udp", "open|filtered");
+						//							e.printStackTrace();
+						//						}
+						//						commander.recordResult(r);
+
 					}
 					break;
 				}
