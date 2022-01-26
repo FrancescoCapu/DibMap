@@ -70,8 +70,8 @@ public class Main {
 		int count = 0;
 		int size = results.size();
 		int totalPorts = (endPort - startingPort + 1) * scanType.length;
-		System.out.println("--------------SCAN RESULTS--------------");
-		System.out.println("PORT\t\tSTATUS\t\tPROTOCOL");
+		System.out.println("----------------------SCAN RESULTS----------------------");
+		System.out.println("PORT\t\tSTATUS\t\tIANA\t\tPROTOCOL");
 
 		if (size > 15) {
 		for (int i = 0; i < size; i++) {
@@ -89,7 +89,7 @@ public class Main {
 					count++;
 			}
 		}
-		System.out.println("------------------END-------------------");
+		System.out.println("--------------------------END---------------------------");
 		System.out.println("Scan time: " + seconds + "." + millis + " seconds");
 		System.out.println("Not closed ports: " + count + " out of total " + totalPorts + " ports");
 	}
