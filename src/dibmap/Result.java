@@ -48,22 +48,12 @@ public class Result {
 			do {
 				values = scanner.nextLine().split("\\t+");
 				
-//				Debug
-//				
-//				for (int i = 0; i < values.length; i++)
-//					System.out.println(values[i]);
-				
 				try {
 					result = Integer.parseInt(values[0]);
 				} catch (NumberFormatException e) {
 					scanner.close();
 					return defaultReturn;
 				}
-				
-//				if ((scanType.equalsIgnoreCase("TCP") && !values[1].equalsIgnoreCase("TCP")) || (scanType.equalsIgnoreCase("UDP") && !values[2].equalsIgnoreCase("UDP"))) {
-//					scanner.close();
-//					return defaultReturn;
-//				}
 						
 				if (result == port) {
 					int valuesLength = values.length;
@@ -76,10 +66,7 @@ public class Result {
 				}
 			} while(port > result);
 			scanner.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (FileNotFoundException e) {}
 		return defaultReturn;
 	}
 }

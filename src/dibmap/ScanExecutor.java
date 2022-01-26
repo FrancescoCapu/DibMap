@@ -15,7 +15,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
 public class ScanExecutor implements Runnable {
-
 	private InetAddress target;
 	private String[] scanType;
 	private int port = 0;
@@ -57,15 +56,11 @@ public class ScanExecutor implements Runnable {
 							e.printStackTrace();
 							break;
 						} catch (SocketTimeoutException e) {
-							//						e.printStackTrace();
-							System.out.println("Connection on port " + port + " timed out.");
 							r = new Result(port, "tcp", "filtered - timed out");
 						} catch (IOException e) {
-							// e.printStackTrace();
 							r = new Result(port, "tcp", "closed");
 							commander.recordResult(r);
 						} catch (SecurityException e) {
-							// e.printStackTrace();
 							r = new Result(port, "tcp", "filtered");
 							commander.recordResult(r);
 						} catch (IllegalArgumentException e) {
@@ -96,18 +91,15 @@ public class ScanExecutor implements Runnable {
 								d.setSoTimeout(timeout);
 								d.receive(packet);
 
-								String received = new String(packet.getData(), 0, packet.getLength());
-								System.out.println("Answer: " + received);
 								r = new Result(port, "udp", "open");
 								break;
 							} catch (PortUnreachableException e) {
-								System.out.println("Port " + port + " unreachable!");
 								r = new Result(port, "udp", "closed");
 								break;
 							} 
 							catch (SecurityException e) {
 								r = new Result(port, "udp", "filtered");
-								e.printStackTrace();
+								break;
 							} catch (IOException e) {
 								r = new Result(port, "udp", "open|filtered");
 							}

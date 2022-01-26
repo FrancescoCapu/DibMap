@@ -4,11 +4,9 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
-
 	private static InetAddress target;
 	private static String[] scanType;
 	private static final int threads = 64;
@@ -21,8 +19,6 @@ public class Main {
 	private static int activeThreads;
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
 		InputHandler in = new InputHandler();
 		if (in.validateTarget(args[0]))
 			target = in.getTargetIP();
@@ -74,8 +70,8 @@ public class Main {
 		int count = 0;
 		int size = results.size();
 		int totalPorts = (endPort - startingPort + 1) * scanType.length;
-		System.out.println("-----SCAN RESULTS-----");
-		System.out.println("Port\t\tStatus\t\tProtocol");
+		System.out.println("--------------SCAN RESULTS--------------");
+		System.out.println("PORT\t\tSTATUS\t\tPROTOCOL");
 
 		if (size > 15) {
 		for (int i = 0; i < size; i++) {
@@ -93,7 +89,7 @@ public class Main {
 					count++;
 			}
 		}
-		System.out.println("---------END----------");
+		System.out.println("------------------END-------------------");
 		System.out.println("Scan time: " + seconds + "." + millis + " seconds");
 		System.out.println("Not closed ports: " + count + " out of total " + totalPorts + " ports");
 	}

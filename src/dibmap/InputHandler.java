@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class InputHandler {
-	
 	private InetAddress target = null;
 	private ArrayList<String> parameters = new ArrayList<String>();
 	private String[] validParametersArray = {"t", "u", "p"};
@@ -25,15 +24,13 @@ public class InputHandler {
 	boolean validateTarget(String target) {
 		try {
 			this.target = InetAddress.getByName(target);
-//			System.out.println(this.target);
 		} catch (UnknownHostException e) {
-//			System.out.println("Wrong IP.");
-			e.printStackTrace();
+			System.out.println("Wrong IP.");
+			return false;
 		} catch (SecurityException e) {
-//			System.out.println("Security issue.");
-			e.printStackTrace();
+			System.out.println("Security issue. Cannot validate target.");
+			return false;
 		}
-//		System.out.println("Target validated.");
 		return true;
 	}
 	
@@ -56,14 +53,8 @@ public class InputHandler {
 		
 		for (int i = 0; i < tmeporaryParametersLength; i++) {
 			if (validParameters.contains(temporaryParameters[i])) {
-//				System.out.println(temporaryParameters[i] + " is a valid character");
 				if (temporaryParameters[i].equals("p")) {
 					try {
-//						if (temporaryParameters[i+1].contains("\\0{2,}")) {
-//							System.out.println("Too many ports");
-//							return false;
-//						}
-//						else if (temporaryParameters[i+1].contains("\\-{1}")) {
 						if (temporaryParameters[i+1].contains("-")) {
 							String[] ports = temporaryParameters[i+1].split("-");
 							if (ports.length == 2) {
@@ -76,16 +67,16 @@ public class InputHandler {
 										return false;
 									}
 									if (endPort < startingPort) {
-										System.out.println("Invalid port range - ascending order required");
+										System.out.println("Invalid port range - ascending order required.");
 										return false;
 									}
 								} catch (NumberFormatException e) {
-									System.out.println("Invalid port number");
+									System.out.println("Invalid port number.");
 									return false;
 								}
 							}
 							else {
-								System.out.println("Too many ports");
+								System.out.println("Too many ports.");
 								return false;
 							}
 						}
@@ -93,20 +84,19 @@ public class InputHandler {
 							startingPort = Integer.parseInt(temporaryParameters[i+1]);
 							endPort = startingPort;
 							if (startingPort < MIN_PORT || startingPort > MAX_PORT) {
-								System.out.println("Invalid port number");
+								System.out.println("Invalid port number.");
 								return false;
 							}
 							i += 1;
 						}
 					} catch (NumberFormatException e) {
-						e.printStackTrace();
+						System.out.println("Invalid port number.");
 						return false;
 					} catch (ArrayIndexOutOfBoundsException e) {
-						System.out.println("Too few arguments - port number(s) missing");
-//						e.printStackTrace();
+						System.out.println("Too few arguments - port number(s) missing.");
 						return false;
 					} catch (IndexOutOfBoundsException e) {
-						e.printStackTrace();
+						System.out.println("Too few arguments - port number(s) missing.");
 						return false;
 					}
 				}
@@ -114,7 +104,7 @@ public class InputHandler {
 					parameters.add(temporaryParameters[i]);
 			}
 			else {
-				System.out.println(temporaryParameters[i] + " not yet implemented or not supported.");
+				System.out.println("unknown \"-" + temporaryParameters[i] + "\" option.");
 				return false;
 			}
 		}

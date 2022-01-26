@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 
 public class HostUpChecker {
-	
 	private String errorReason;
 	
 	public HostUpChecker() {
@@ -19,12 +18,9 @@ public class HostUpChecker {
 			errorReason = "Ping timed out - took more than " + timeout + " ms.";
 			return false;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			errorReason = "IO Exception during ping process.";
 			return false;
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
 			errorReason = "Illegal argument exception.";
 			return false;
 		}
