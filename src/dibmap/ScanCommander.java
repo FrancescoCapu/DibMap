@@ -8,13 +8,13 @@ public class ScanCommander {
 	private int index = 0;
 	private ArrayList<Integer> portInterval = new ArrayList<Integer>();
 	private ArrayList<Result> results = new ArrayList<Result>();
-	
+
 	public ScanCommander(int startingPort, int endingPort, int activeThreads) {
 		for (int i = startingPort; i <= endingPort; i++) {
 			portInterval.add(i);
 		}
 	}
-	
+
 	synchronized int getPort() {
 		if (index < portInterval.size())
 			return portInterval.get(index++);
@@ -22,11 +22,11 @@ public class ScanCommander {
 			return -1;
 		}
 	}
-	
+
 	synchronized void recordResult(Result r) {
 		results.add(r);
 	}
-	
+
 	ArrayList<Result> getResults() {
 		Collections.sort(results, new Comparator<Result>() {
 			@Override

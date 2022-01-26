@@ -10,17 +10,17 @@ public class InputHandler {
 	private ArrayList<String> parameters = new ArrayList<String>();
 	private String[] validParametersArray = {"t", "u", "p"};
 	private ArrayList<String> validParameters = new ArrayList<String>();
-	
+
 	// Default port range: 1-1023 (well-known ports)
 	private int startingPort = 1;
 	private int endPort = 1023;
 	private final int MIN_PORT = 1;
 	private final int MAX_PORT = 65535;
-	
+
 	public InputHandler() {
 		validParameters.addAll(Arrays.asList(validParametersArray));
 	}
-	
+
 	boolean validateTarget(String target) {
 		try {
 			this.target = InetAddress.getByName(target);
@@ -33,11 +33,11 @@ public class InputHandler {
 		}
 		return true;
 	}
-	
+
 	InetAddress getTargetIP() {
 		return target;
 	}
-	
+
 	boolean validateParameters(String[] args) {
 		int len = args.length;
 		for (int i = 1; i < len; i++) {
@@ -45,12 +45,12 @@ public class InputHandler {
 			if (args[i].equals("p"))
 				++i;
 		}
-		
+
 		String[] temporaryParameters = new String[args.length - 1];
 		int tmeporaryParametersLength = temporaryParameters.length;
 		for (int i = 0; i < tmeporaryParametersLength; i++)
 			temporaryParameters[i] = args[i + 1];
-		
+
 		for (int i = 0; i < tmeporaryParametersLength; i++) {
 			if (validParameters.contains(temporaryParameters[i])) {
 				if (temporaryParameters[i].equals("p")) {
@@ -117,7 +117,7 @@ public class InputHandler {
 		}
 		return true;
 	}
-	
+
 	String[] getParameters() {
 		String[] param;
 		if (parameters.size() != 0) {
@@ -136,7 +136,7 @@ public class InputHandler {
 	int getStartingPort() {
 		return startingPort;
 	}
-	
+
 	int getEndPort() {
 		return endPort;
 	}

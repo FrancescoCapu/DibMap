@@ -5,11 +5,11 @@ import java.net.InetAddress;
 
 public class HostUpChecker {
 	private String errorReason;
-	
+
 	public HostUpChecker() {
 
 	}
-	
+
 	boolean checkReachability(InetAddress target) {
 		int timeout = 5000;
 		try {
@@ -25,7 +25,7 @@ public class HostUpChecker {
 			return false;
 		}
 	}
-	
+
 	String getErrorReason() {
 		return errorReason;
 	}

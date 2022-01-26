@@ -17,7 +17,7 @@ public class Main {
 	private static long startTime;
 	private static long finishTime;
 	private static int activeThreads;
-	
+
 	public static void main(String[] args) {
 		InputHandler in = new InputHandler();
 		if (in.validateTarget(args[0]))
@@ -53,7 +53,7 @@ public class Main {
 			}	
 		}
 	}
-	
+
 	synchronized static void executorShutdown() {
 		activeThreads--;
 		if (activeThreads == 0)
@@ -65,7 +65,7 @@ public class Main {
 		long scanTime = finishTime - startTime;
 		long seconds = TimeUnit.MILLISECONDS.toSeconds(scanTime);
 		long millis = scanTime - seconds;
-	
+
 		ArrayList<Result> results = commander.getResults();
 		int count = 0;
 		int size = results.size();
@@ -74,12 +74,12 @@ public class Main {
 		System.out.println("PORT\t\tSTATUS\t\tIANA\t\tPROTOCOL");
 
 		if (size > 15) {
-		for (int i = 0; i < size; i++) {
-			if (!results.get(i).status.equals("closed")) {
-				System.out.println(results.get(i).toString());
-				count++;
+			for (int i = 0; i < size; i++) {
+				if (!results.get(i).status.equals("closed")) {
+					System.out.println(results.get(i).toString());
+					count++;
+				}
 			}
-		}
 		}
 		else
 		{

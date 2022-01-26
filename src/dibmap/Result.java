@@ -11,7 +11,7 @@ public class Result {
 	String status;
 	private String protocol;
 	private String approvedByIana;
-	
+
 	public Result(int port, String scanType, String status) {
 		this.port = port;
 		this.scanType = scanType;
@@ -19,26 +19,26 @@ public class Result {
 		protocol = getProtocol();
 		approvedByIana = getApproval();
 	}
-	
+
 	@Override
 	public String toString(){
 		String toBeReturned = port + "/" + scanType + "\t";
-		
+
 		// /tcp or /udp are 4 characters long, + max 3 for port numbers under 1000
 		if (port < 1000)
 			toBeReturned += "\t";
 		toBeReturned += status + "\t";
 		if (status.length() < 8)
 			toBeReturned += "\t";
-		
+
 		toBeReturned +=  approvedByIana + "\t\t" + protocol;
 		return toBeReturned;
 	}
-	
+
 	private String getProtocol() {
 		String defaultReturn = "unknown";
 		String ret = "";
-		
+
 		if (port >= 49152)
 			return "ephemeral port";
 		File file = new File("./../files/port_list.txt");
@@ -49,14 +49,14 @@ public class Result {
 			scanner.nextLine();	// To scan header line
 			do {
 				values = scanner.nextLine().split("\\t+");
-				
+
 				try {
 					result = Integer.parseInt(values[0]);
 				} catch (NumberFormatException e) {
 					scanner.close();
 					return defaultReturn;
 				}
-						
+
 				if (result == port) {
 					int valuesLength = values.length;
 					for (int i = 1; i < valuesLength - 1; i++) {
@@ -71,7 +71,7 @@ public class Result {
 		} catch (FileNotFoundException e) {}
 		return defaultReturn;
 	}
-	
+
 	private String getApproval() {
 		String defaultReturn = "unknown";
 		File file = new File("./../files/port_list.txt");
@@ -82,14 +82,14 @@ public class Result {
 			scanner.nextLine();	// To scan header line
 			do {
 				values = scanner.nextLine().split("\\t+");
-				
+
 				try {
 					result = Integer.parseInt(values[0]);
 				} catch (NumberFormatException e) {
 					scanner.close();
 					return defaultReturn;
 				}
-						
+
 				if (result == port) {
 					int valuesLength = values.length;
 					if (values[valuesLength - 1].equalsIgnoreCase("official")) {

@@ -72,7 +72,7 @@ public class ScanExecutor implements Runnable {
 						}
 					}
 					break;
-				// UDP scan
+					// UDP scan
 				case "u":
 					if (port != -1) {
 						// for loop used to achieve a more precise result - ICMP type 3 reply may not always be received
