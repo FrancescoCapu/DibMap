@@ -13,7 +13,4 @@ Then, you have to compile the program using the command 'javac dibmap/*.java'.
 Linux/macOS: [sudo] java dibmap.Main *target* [-t] [-u] [-p port[-port]]  
 Windows: java dibmap.Main *target* [-t] [-u] [-p port[-port]]  
   
-Run it either as normal user or administartor, depending on scan type
-
-## Contributing
-Pull requests are always welcome. Please add an appropriate description to keep things easy to understand.
+Run it either as normal user or administartor, depending on scan type.

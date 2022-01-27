@@ -104,7 +104,7 @@ public class ScanExecutor implements Runnable {
 								r = new Result(port, "udp", "open|filtered");
 							}
 						}
-						commander.recordResult(r);
+						commander.recordResult(r);						
 					}
 					break;
 				}
